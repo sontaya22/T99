@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ร้านอาหารฟิวชัน & เกมจับคู่เมนูเด็ด</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap');
+        body { font-family: 'Kanit', sans-serif; }
+        .card-flip { transform-style: preserve-3d; transition: transform 0.6s; }
+        .flipped { transform: rotateY(180deg); }
+        .backface-hidden { backface-visibility: hidden; }
+    </style>
+</head>
+<body class="bg-amber-50 text-slate-800 min-h-screen">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-amber-600 to-orange-600 text-white py-10 shadow-lg text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-2">🍽️ Culinary Fusion Experience</h1>
+        <p class="text-amber-100 text-lg">ไอเดียเมนูใหม่ ชื่อร้านสุดเก๋ และเกมสนุกๆ สำหรับคุณ</p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-12">
+
+        <!-- 1. Restaurant Names Section -->
+        <section class="bg-white rounded-2xl p-6 shadow-md border border-amber-100">
+            <h2 class="text-2xl font-bold text-amber-800 mb-4 flex items-center gap-2">
+                <i class="fa-solid font-bold fa-store text-orange-500"></i> ไอเดียชื่อร้านอาหารใหม่ๆ
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3" id="storeNameContainer">
+                <!-- Javascript will populate or static -->
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center font-semibold text-amber-900 shadow-sm">ปรุงสุข Bistro</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center font-semibold text-amber-900 shadow-sm">รสเสน่หา Fusion</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center font-semibold text-amber-900 shadow-sm">อัคนี & ปฐพี</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center font-semibold text-amber-900 shadow-sm">รสรินทร์ Dining</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center font-semibold text-amber-900 shadow-sm">ครัวชวนเคลิ้ม</div>
+            </div>
+        </section>
+
+        <!-- 2. Creative Menu Section -->
+        <section>
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-utensils text-orange-500"></i> 5 เมนูใหม่สุดสร้างสรรค์
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="menuGrid">
+                <!-- Filled via JS -->
+            </div>
+        </section>
+
+        <!-- 3. Mini Game Section -->
+        <section class="bg-white rounded-2xl p-6 md:p-8 shadow-xl border border-orange-200">
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold text-orange-600 mb-2">🎮 เกมจับคู่เมนูเด็ด (Food Memory Game)</h2>
+                <p class="text-slate-600">จับคู่ภาพเมนูอาหารที่เหมือนกันให้ครบเพื่อรับรางวัลส่วนลดพิเศษ!</p>
+                <div class="mt-4 flex justify-center gap-6 text-lg font-semibold text-slate-700">
+                    <div>เวลา: <span id="timer" class="text-orange-600">0</span> วินาที</div>
+                    <div>จับคู่สำเร็จ: <span id="score" class="text-green-600">0</span> / 4 คู่</div>
+                </div>
+            </div>
+
+            <!-- Memory Game Grid -->
+            <div id="gameBoard" class="grid grid-cols-4 gap-3 max-w-lg mx-auto min-h-[300px]">
+                <!-- Cards generated via JS -->
+            </div>
+
+            <div class="text-center mt-6">
+                <button onclick="resetGame()" class="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-2.5 px-6 rounded-full shadow-lg transition transform hover:scale-105 active:scale-95">
+                    <i class="fa-solid fa-rotate-right mr-2"></i> เริ่มเกมใหม่
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-6 text-slate-500 text-sm">
+        © 2026 Modern Kitchen Studio. All rights reserved.
+    </footer>
+
+    <!-- JavaScript logic -->
+    <script>
+        // Menu Data
+        const menus = [
+            {
+                title: "กะเพราเนื้อลาวาไข่เค็มดิป",
+                category: "อาหารจานหลัก",
+                tag: "Best Seller",
+                desc: "เนื้อออสเตรเลียสับผัดกะเพราพริกแห้งเข้มข้น ราดด้วยซอสไข่เค็มลาวาเยิ้มรสกลมกล่อม",
+                icon: "fa-fire-burner",
+                price: "189 ฿"
+            },
+            {
+                title: "ส้มตำทอดทรัฟเฟิลกุ้งแม่น้ำ",
+                category: "อาหารทานเล่น/ยำ",
+                tag: "Fusion",
+                desc: "มะละกอกรอบทอด คลุกเคล้าซอสมะขามหวานซ่อนเปรี้ยวหอมทรัฟเฟิล เสิร์ฟพร้อมกุ้งแม่น้ำย่างเนย",
+                icon: "fa-shrimp",
+                price: "249 ฿"
+            },
+            {
+                title: "ต้มยำมันกุ้งริซอตโต้",
+                category: "อาหารจานหลัก",
+                tag: "Chef Recommended",
+                desc: "ข้าวสไตล์อิตาเลียนริซอตโต้ผัดซอสต้มยำมันกุ้งเข้มข้น รสชาติไทยแท้จัดจ้าน",
+                icon: "fa-bowl-rice",
+                price: "229 ฿"
+            },
+            {
+                title: "ชานมชาไทยพ่นไฟอัคนี",
+                category: "เครื่องดื่ม",
+                tag: "Signature Drink",
+                desc: "ชาไทยเข้มข้นสกัดเย็น ท็อปด้วยครีมชีสนุ่มพ่นไฟน้ำตาลอ้อย และไข่มุกเฉาก๊วย",
+                icon: "fa-glass-water",
+                price: "85 ฿"
+            },
+            {
+                title: "ไอศกรีมกะทิอบควันเทียนข้าวแต๋น",
+                category: "ของหวาน",
+                tag: "New Dessert",
+                desc: "ไอศกรีมกะทิหอมกลิ่นอบควันเทียน ราดซอสน้ำตาลตโนดเคี่ยว บนฐานข้าวแต๋นกรอบ",
+                icon: "fa-ice-cream",
+                price: "95 ฿"
+            }
+        ];
+
+        // Render Menus
+        const menuGrid = document.getElementById('menuGrid');
+        menus.forEach(item => {
+            menuGrid.innerHTML += `
+                <div class="bg-white rounded-2xl p-5 shadow-md hover:shadow-xl transition border border-amber-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">${item.tag}</span>
+                            <span class="text-xl font-bold text-orange-600">${item.price}</span>
+                        </div>
+                        <div class="text-3xl text-orange-500 mb-2">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-1">${item.title}</h3>
+                        <p class="text-xs font-semibold text-amber-600 mb-2">${item.category}</p>
+                        <p class="text-slate-600 text-sm leading-relaxed">${item.desc}</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Game Logic
+        const cardIcons = ['fa-fire-burner', 'fa-shrimp', 'fa-bowl-rice', 'fa-ice-cream'];
+        let cards = [...cardIcons, ...cardIcons]; // 4 pairs (8 cards)
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let timerInterval = null;
+        let seconds = 0;
+        let gameStarted = false;
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function createGameBoard() {
+            const board = document.getElementById('gameBoard');
+            board.innerHTML = '';
+            const shuffledCards = shuffle([...cards]);
+
+            shuffledCards.forEach((icon, index) => {
+                const card = document.createElement('div');
+                card.className = 'relative w-full h-24 cursor-pointer perspective';
+                card.innerHTML = `
+                    <div class="card-inner card-flip w-full h-full relative rounded-xl shadow-md" data-icon="${icon}">
+                        <div class="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl font-bold backface-hidden">
+                            ❓
+                        </div>
+                        <div class="absolute inset-0 bg-white border-2 border-orange-400 rounded-xl flex items-center justify-center text-3xl text-orange-500 backface-hidden [transform:rotateY(180deg)]">
+                            <i class="fa-solid ${icon}"></i>
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => handleCardClick(card));
+                board.appendChild(card);
+            });
+        }
+
+        function handleCardClick(card) {
+            if (!gameStarted) {
+                startTimer();
+                gameStarted = true;
+            }
+
+            const inner = card.querySelector('.card-inner');
+            if (flippedCards.length < 2 && !inner.classList.contains('flipped') && !inner.classList.contains('matched')) {
+                inner.classList.add('flipped');
+                flippedCards.push(inner);
+
+                if (flippedCards.length === 2) {
+                    checkMatch();
+                }
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            const icon1 = card1.getAttribute('data-icon');
+            const icon2 = card2.getAttribute('data-icon');
+
+            if (icon1 === icon2) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                document.getElementById('score').innerText = matchedPairs;
+                flippedCards = [];
+
+                if (matchedPairs === cardIcons.length) {
+                    clearInterval(timerInterval);
+                    setTimeout(() => {
+                        alert(`🎉 ยินดีด้วย! คุณจับคู่ครบหมดในเวลา ${seconds} วินาที!\nรับคูปองส่วนลดค่าอาหาร 10% เลยทันที!`);
+                    }, 300);
+                }
+            } else {
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    flippedCards = [];
+                }, 800);
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            seconds = 0;
+            document.getElementById('timer').innerText = seconds;
+            timerInterval = setInterval(() => {
+                seconds++;
+                document.getElementById('timer').innerText = seconds;
+            }, 1000);
+        }
+
+        function resetGame() {
+            clearInterval(timerInterval);
+            seconds = 0;
+            matchedPairs = 0;
+            gameStarted = false;
+            flippedCards = [];
+            document.getElementById('timer').innerText = 0;
+            document.getElementById('score').innerText = 0;
+            createGameBoard();
+        }
+
+        // Initialize Game on Load
+        createGameBoard();
+    </script>
+</body>
+</html>
